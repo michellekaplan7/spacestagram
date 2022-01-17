@@ -17,8 +17,6 @@ export type DispatchAction = {
 };
 
 export type SpaceCardProps = {
-  data: Array<SpaceDataPlus>;
-  favorites: Array<SpaceDataPlus>;
   handleClear: (dispatch: Dispatch) => any;
   store: { state: AppState; dispatch: Dispatch };
   toggleFavAction: FavAction;

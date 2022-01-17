@@ -1,25 +1,29 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
-import { Theme } from "@mui/material";
+import { Button, Theme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 import SpaceCard from "../SpaceCard/SpaceCard";
 
-import { AppState, Dispatch, FavAction, SpaceDataPlus } from "../../@types";
+import { AppState, Dispatch, FavAction } from "../../@types";
 
 type Props = {
-  data: Array<SpaceDataPlus>;
-  favorites: Array<SpaceDataPlus>;
   handleClear: (dispatch: Dispatch) => any;
+  showFavorites?: boolean;
   store: { state: AppState; dispatch: Dispatch };
   toggleFavAction: FavAction;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
+  actionContainer: {
+    display: "flex",
+    justifyContent: "center",
+  },
   container: {
     display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr 1fr",
     gridGap: theme.spacing(5),
+    gridTemplateColumns: "1fr 1fr 1fr 1fr",
     padding: theme.spacing(9),
     [theme.breakpoints.down("md")]: {
       gridTemplateColumns: "1fr 1fr 1fr",
@@ -32,25 +36,53 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const CardContainer = (props: Props) => {
   const classes = useStyles();
-  const { data, favorites, handleClear, store, toggleFavAction } = props;
-  const { dispatch } = store;
+  const { handleClear, store, toggleFavAction, showFavorites } = props;
+  const { state, dispatch } = store;
+  const { data, favorites } = state;
 
-  const cards = data.map((info, i) => {
-    return (
-      <SpaceCard
-        favorites={favorites}
-        info={info}
-        key={`card-${i}`}
-        store={store}
-        toggleFavAction={toggleFavAction}
-      />
-    );
-  });
+  const getCards = () => {
+    if (showFavorites) {
+      return favorites.map((info, i) => {
+        return (
+          <SpaceCard
+            favorites={favorites}
+            info={info}
+            key={`card-${i}`}
+            store={store}
+            toggleFavAction={toggleFavAction}
+          />
+        );
+      });
+    } else {
+      return data.map((info, i) => {
+        return (
+          <SpaceCard
+            favorites={favorites}
+            info={info}
+            key={`card-${i}`}
+            store={store}
+            toggleFavAction={toggleFavAction}
+          />
+        );
+      });
+    }
+  };
 
   return (
     <>
-      <div className={classes.container}>{cards}</div>
-      <button onClick={() => handleClear(dispatch)}>CLEAR</button>
+      <div className={classes.container}>{getCards()}</div>
+      <div className={classes.actionContainer}>
+        {showFavorites && !favorites.length && (
+          <NavLink to="/">
+            <Button variant="contained">Add favorites</Button>
+          </NavLink>
+        )}
+        {showFavorites && favorites.length > 0 && (
+          <Button onClick={() => handleClear(dispatch)} variant="contained">
+            Clear all
+          </Button>
+        )}
+      </div>
     </>
   );
 };

@@ -1,16 +1,6 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
-const theme = createTheme({
-  components: {
-    MuiIconButton: {
-      styleOverrides: {
-        colorPrimary: {
-          color: "red",
-        },
-      },
-    },
-  },
-});
+const theme = createTheme({});
 
 const responsiveFontOptions = {
   factor: 2, //default: 2

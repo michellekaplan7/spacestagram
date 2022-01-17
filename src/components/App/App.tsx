@@ -1,7 +1,9 @@
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 
-import { Store } from "../Store/Store";
 import CardContainer from "../CardContainer/CardContainer";
+import Header from "../Header/Header";
+import { Store } from "../Store/Store";
 import { fetchDataAction, handleClear, toggleFavAction } from "../../Actions";
 import { SpaceCardProps } from "../../@types";
 
@@ -19,17 +21,22 @@ const App = () => {
   });
 
   const props: SpaceCardProps = {
-    data: state.data,
-    favorites: state.favorites,
     handleClear,
     store: { state, dispatch },
     toggleFavAction,
   };
 
   return (
-    <div>
-      <CardContainer {...props} />
-    </div>
+    <>
+      <Header />
+      <Routes>
+        <Route element={<CardContainer {...props} />} path="/" />
+        <Route
+          element={<CardContainer showFavorites {...props} />}
+          path="/favorites"
+        />
+      </Routes>
+    </>
   );
 };
 
