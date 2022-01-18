@@ -18,10 +18,7 @@ export const fetchDataAction = async (dispatch: Dispatch) => {
       id: i,
     };
   });
-  return dispatch({
-    type: "FETCH_DATA",
-    payload: newData,
-  });
+  return dispatch({ type: "FETCH_SUCCESS", payload: newData });
 };
 
 export const toggleFavAction = (
@@ -30,18 +27,13 @@ export const toggleFavAction = (
   data: SpaceDataPlus | any
 ): DispatchAction => {
   const spaceCardInFav = state.favorites.find((el) => el.id === data.id);
-  let dispatchObj = {
-    type: "ADD_FAV",
-    payload: data,
-  };
+  let dispatchObj = { type: "ADD_FAV", payload: data };
+
   if (spaceCardInFav) {
     const notFavorite = state.favorites.filter(
       (fav: SpaceDataPlus) => fav.id !== data.id
     );
-    dispatchObj = {
-      type: "REMOVE_FAV",
-      payload: notFavorite,
-    };
+    dispatchObj = { type: "REMOVE_FAV", payload: notFavorite };
   }
 
   return dispatch(dispatchObj);

@@ -92,9 +92,8 @@ const Header = () => {
           </NavLink>
           <Box sx={{ display: { md: "flex", xs: "none" }, flexGrow: 1 }}>
             {pages.map((page) => (
-              <NavLink to={page.path}>
+              <NavLink key={page.label} to={page.path}>
                 <Button
-                  key={page.label}
                   onClick={handleCloseNavMenu}
                   sx={{ color: "white", display: "block", my: 2 }}
                 >

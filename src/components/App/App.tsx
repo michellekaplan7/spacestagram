@@ -3,22 +3,46 @@ import { Route, Routes } from "react-router-dom";
 
 import CardContainer from "../CardContainer/CardContainer";
 import Header from "../Header/Header";
-import { Store } from "../Store/Store";
 import { fetchDataAction, handleClear, toggleFavAction } from "../../Actions";
-import { SpaceCardProps } from "../../@types";
+import { AppState, DispatchAction, SpaceCardProps } from "../../@types";
 
 const storageKey = "localFavorites";
 
+const initialState: AppState = {
+  data: [],
+  favorites: [],
+};
+
+function reducer(state: AppState, action: DispatchAction): AppState {
+  switch (action.type) {
+    case "FETCH_SUCCESS":
+      return { ...state, data: action.payload };
+    case "ADD_FAV":
+      return { ...state, favorites: [...state.favorites, action.payload] };
+    case "REMOVE_FAV":
+      return { ...state, favorites: action.payload };
+    case "CLEAR":
+      return { ...state, favorites: [] };
+    default:
+      return state;
+  }
+}
+
 const App = () => {
-  const { state, dispatch } = React.useContext(Store);
+  const [state, dispatch] = React.useReducer(
+    reducer,
+    initialState,
+    //@ts-expect-error this is okay
+    (initial) => JSON.parse(localStorage.getItem(storageKey)) || initial
+  );
 
   React.useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(state));
   }, [state]);
 
   React.useEffect(() => {
-    state.data.length === 0 && fetchDataAction(dispatch);
-  });
+    fetchDataAction(dispatch);
+  }, []);
 
   const props: SpaceCardProps = {
     handleClear,
