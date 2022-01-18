@@ -11,12 +11,21 @@ const storageKey = "localFavorites";
 const initialState: AppState = {
   data: [],
   favorites: [],
+  loading: true,
+  error: false,
 };
 
 function reducer(state: AppState, action: DispatchAction): AppState {
   switch (action.type) {
     case "FETCH_SUCCESS":
-      return { ...state, data: action.payload };
+      return { ...state, data: action.payload, loading: false, error: false };
+    case "FETCH_ERROR":
+      return {
+        ...state,
+        data: action.payload,
+        loading: false,
+        error: true,
+      };
     case "ADD_FAV":
       return { ...state, favorites: [...state.favorites, action.payload] };
     case "REMOVE_FAV":
@@ -35,6 +44,8 @@ const App = () => {
     //@ts-expect-error this is okay
     (initial) => JSON.parse(localStorage.getItem(storageKey)) || initial
   );
+
+  console.log({ state });
 
   React.useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(state));

@@ -9,6 +9,8 @@ export type FavAction = (
 export type AppState = {
   data: Array<SpaceDataPlus>;
   favorites: Array<SpaceDataPlus>;
+  loading: boolean;
+  error: boolean;
 };
 
 export type DispatchAction = {
