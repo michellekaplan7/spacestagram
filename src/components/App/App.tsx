@@ -3,7 +3,12 @@ import { Route, Routes } from "react-router-dom";
 
 import CardContainer from "../CardContainer/CardContainer";
 import Header from "../Header/Header";
-import { fetchDataAction, handleClear, toggleFavAction } from "../../Actions";
+import {
+  fetchDataAction,
+  handleClear,
+  handleResetLoading,
+  toggleFavAction,
+} from "../../Actions";
 import { AppState, DispatchAction, SpaceCardProps } from "../../@types";
 
 const storageKey = "localFavorites";
@@ -32,6 +37,9 @@ function reducer(state: AppState, action: DispatchAction): AppState {
       return { ...state, favorites: action.payload };
     case "CLEAR":
       return { ...state, favorites: [] };
+    case "RESET_LOADING":
+      return { ...state, loading: true };
+
     default:
       return state;
   }
@@ -45,13 +53,17 @@ const App = () => {
     (initial) => JSON.parse(localStorage.getItem(storageKey)) || initial
   );
 
+  const [startDate, setStartDate] = React.useState<Date>(
+    new Date("2021-11-02")
+  );
+
   React.useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(state));
   }, [state]);
 
   React.useEffect(() => {
-    fetchDataAction(dispatch);
-  }, []);
+    fetchDataAction(dispatch, startDate);
+  }, [startDate]);
 
   const props: SpaceCardProps = {
     handleClear,
@@ -61,7 +73,12 @@ const App = () => {
 
   return (
     <>
-      <Header />
+      <Header
+        dispatch={dispatch}
+        handleResetLoading={handleResetLoading}
+        setStartDate={setStartDate}
+        startDate={startDate}
+      />
       <Routes>
         <Route element={<CardContainer {...props} />} path="/" />
         <Route

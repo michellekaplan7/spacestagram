@@ -14,9 +14,24 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
+import DatePicker from "../DatePicker/DatePicker";
+import { Dispatch } from "../../@types";
+
+type Props = {
+  startDate: Date;
+  setStartDate: React.Dispatch<React.SetStateAction<Date>>;
+  dispatch: Dispatch;
+  handleResetLoading: (dispatch: Dispatch) => any;
+};
+
 const pages = [{ label: "Favorites", path: "/favorites" }];
 
-const Header = () => {
+const Header = ({
+  dispatch,
+  handleResetLoading,
+  setStartDate,
+  startDate,
+}: Props) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -92,6 +107,7 @@ const Header = () => {
               SPACESTAGRAM
             </Typography>
           </NavLink>
+
           <Box sx={{ display: { md: "flex", xs: "none" }, flexGrow: 1 }}>
             {pages.map((page) => (
               <NavLink key={page.label} to={page.path}>
@@ -103,6 +119,15 @@ const Header = () => {
                 </Button>
               </NavLink>
             ))}
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <DatePicker
+              dispatch={dispatch}
+              handleResetLoading={handleResetLoading}
+              setStartDate={setStartDate}
+              startDate={startDate}
+            />
           </Box>
         </Toolbar>
       </Container>

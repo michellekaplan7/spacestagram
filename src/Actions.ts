@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import {
   AppState,
   Dispatch,
@@ -8,8 +9,10 @@ import {
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-export const fetchDataAction = async (dispatch: Dispatch) => {
-  const URL = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&start_date=2021-11-01`;
+export const fetchDataAction = async (dispatch: Dispatch, startDate: Date) => {
+  const formattedDate = format(startDate, "yyyy-MM-dd");
+  const URL = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&start_date=${formattedDate}`;
+
   try {
     const response = await fetch(URL);
     const dataJSON: SpaceData[] = await response.json();
@@ -46,4 +49,8 @@ export const toggleFavAction = (
 
 export const handleClear = (dispatch: any) => {
   return dispatch({ type: "CLEAR" });
+};
+
+export const handleResetLoading = (dispatch: any) => {
+  return dispatch({ type: "RESET_LOADING" });
 };
