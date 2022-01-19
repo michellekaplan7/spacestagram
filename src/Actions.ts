@@ -9,7 +9,7 @@ import {
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 export const fetchDataAction = async (dispatch: Dispatch) => {
-  const URL = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&start_date=2022-01-01`;
+  const URL = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&start_date=2021-11-01`;
   try {
     const response = await fetch(URL);
     const dataJSON: SpaceData[] = await response.json();
@@ -21,7 +21,6 @@ export const fetchDataAction = async (dispatch: Dispatch) => {
     });
     dispatch({ type: "FETCH_SUCCESS", payload: newData });
   } catch (error) {
-    console.log({ error });
     //@ts-expect-error payload for error is a boolean
     dispatch({ type: "FETCH_ERROR", error: true });
   }

@@ -16,6 +16,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import { styled } from "@mui/material/styles";
 
 import { AppState, Dispatch, FavAction, SpaceDataPlus } from "../../@types";
+import notFound from "../../assets/images/image-not-found.png";
 
 type Props = {
   favorites: Array<SpaceDataPlus>;
@@ -52,7 +53,12 @@ const SpaceCard = ({ favorites, info, store, toggleFavAction }: Props) => {
 
   return (
     <Card sx={{ maxWidth: 400 }}>
-      <CardMedia alt={title} component="img" height="194" image={hdurl} />
+      <CardMedia
+        alt={title}
+        component="img"
+        height="194"
+        image={hdurl ? hdurl : notFound}
+      />
       <CardContent>
         <Typography color="text.primary" variant="body2">
           {title}

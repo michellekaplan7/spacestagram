@@ -45,8 +45,6 @@ const App = () => {
     (initial) => JSON.parse(localStorage.getItem(storageKey)) || initial
   );
 
-  console.log({ state });
-
   React.useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(state));
   }, [state]);
