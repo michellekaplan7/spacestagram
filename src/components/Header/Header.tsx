@@ -18,10 +18,11 @@ import DatePicker from "../DatePicker/DatePicker";
 import { Dispatch } from "../../@types";
 
 type Props = {
-  startDate: Date;
-  setStartDate: React.Dispatch<React.SetStateAction<Date>>;
   dispatch: Dispatch;
   handleResetLoading: (dispatch: Dispatch) => any;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setStartDate: React.Dispatch<React.SetStateAction<Date>>;
+  startDate: Date;
 };
 
 const pages = [{ label: "Favorites", path: "/favorites" }];
@@ -29,6 +30,7 @@ const pages = [{ label: "Favorites", path: "/favorites" }];
 const Header = ({
   dispatch,
   handleResetLoading,
+  setCurrentPage,
   setStartDate,
   startDate,
 }: Props) => {
@@ -42,6 +44,7 @@ const Header = ({
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+    setCurrentPage(1);
   };
 
   return (

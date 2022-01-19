@@ -1,9 +1,12 @@
 import React from "react";
+import { SpaceDataPlus } from "../@types";
 
-import { SpaceDataPlus } from "../../@types";
-
-function usePagination(data: SpaceDataPlus[], itemsPerPage: number) {
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
+function usePagination(
+  currentPage: number,
+  data: SpaceDataPlus[],
+  itemsPerPage: number,
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+) {
   const maxPage = Math.ceil(data.length / itemsPerPage);
 
   function currentData() {

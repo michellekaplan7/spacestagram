@@ -57,6 +57,8 @@ const App = () => {
     new Date("2021-11-02")
   );
 
+  const [currentPage, setCurrentPage] = React.useState<number>(1);
+
   React.useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(state));
   }, [state]);
@@ -76,13 +78,30 @@ const App = () => {
       <Header
         dispatch={dispatch}
         handleResetLoading={handleResetLoading}
+        setCurrentPage={setCurrentPage}
         setStartDate={setStartDate}
         startDate={startDate}
       />
       <Routes>
-        <Route element={<CardContainer {...props} />} path="/" />
         <Route
-          element={<CardContainer showFavorites {...props} />}
+          element={
+            <CardContainer
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              {...props}
+            />
+          }
+          path="/"
+        />
+        <Route
+          element={
+            <CardContainer
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              showFavorites
+              {...props}
+            />
+          }
           path="/favorites"
         />
       </Routes>
