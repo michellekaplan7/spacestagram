@@ -1,5 +1,5 @@
 import React from "react";
-import { FacebookShareButton } from "react-share";
+import { FacebookIcon, FacebookShareButton } from "react-share";
 
 import {
   Card,
@@ -9,11 +9,12 @@ import {
   Collapse,
   IconButton,
   IconButtonProps,
+  Theme,
   Typography,
 } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import { styled } from "@mui/material/styles";
 
 import { AppState, Dispatch, FavAction, SpaceDataPlus } from "../../@types";
@@ -30,6 +31,16 @@ interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+  shareBtn: {
+    marginTop: theme.spacing(1),
+    cursor: "pointer",
+    "&:hover:not(:active)": {
+      opacity: "0.75",
+    },
+  },
+}));
+
 const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -42,6 +53,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 const SpaceCard = ({ favorites, info, store, toggleFavAction }: Props) => {
+  const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { state, dispatch } = store;
   const { date, explanation, hdurl, id, title, url } = info;
@@ -68,7 +80,10 @@ const SpaceCard = ({ favorites, info, store, toggleFavAction }: Props) => {
           {date}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions
+        sx={{ display: "flex", justifyContent: "center" }}
+        disableSpacing
+      >
         <IconButton
           aria-label="add to favorites"
           color={isFavorite ? "primary" : "default"}
@@ -76,11 +91,15 @@ const SpaceCard = ({ favorites, info, store, toggleFavAction }: Props) => {
         >
           <FavoriteIcon />
         </IconButton>
-        <IconButton>
-          <FacebookShareButton url={url} quote={title}>
-            <FacebookIcon />
-          </FacebookShareButton>
-        </IconButton>
+
+        <FacebookShareButton
+          url={url}
+          quote={title}
+          className={classes.shareBtn}
+        >
+          <FacebookIcon size={32} round />
+        </FacebookShareButton>
+
         <ExpandMore
           aria-expanded={expanded}
           aria-label="show more"
