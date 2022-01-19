@@ -1,4 +1,5 @@
 import React from "react";
+import { FacebookShareButton } from "react-share";
 
 import {
   Card,
@@ -12,7 +13,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
+import FacebookIcon from "@mui/icons-material/Facebook";
 import { styled } from "@mui/material/styles";
 
 import { AppState, Dispatch, FavAction, SpaceDataPlus } from "../../@types";
@@ -43,7 +44,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 const SpaceCard = ({ favorites, info, store, toggleFavAction }: Props) => {
   const [expanded, setExpanded] = React.useState(false);
   const { state, dispatch } = store;
-  const { date, explanation, hdurl, id, title } = info;
+  const { date, explanation, hdurl, id, title, url } = info;
 
   const isFavorite = favorites.find((fav: SpaceDataPlus) => fav.id === id);
 
@@ -75,8 +76,10 @@ const SpaceCard = ({ favorites, info, store, toggleFavAction }: Props) => {
         >
           <FavoriteIcon />
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+        <IconButton>
+          <FacebookShareButton url={url} quote={title}>
+            <FacebookIcon />
+          </FacebookShareButton>
         </IconButton>
         <ExpandMore
           aria-expanded={expanded}
