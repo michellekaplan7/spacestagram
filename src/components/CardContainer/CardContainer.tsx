@@ -1,14 +1,15 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { Button, Theme } from "@mui/material";
+import { Button, Container, Grid, Pagination, Theme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
-import SpaceCard from "../SpaceCard/SpaceCard";
-
-import { AppState, Dispatch, FavAction } from "../../@types";
 import Error from "../Error/Error";
 import Loading from "../Loading/Loading";
+import SpaceCard from "../SpaceCard/SpaceCard";
+import usePagination from "../Pagination/Pagination";
+
+import { AppState, Dispatch, FavAction } from "../../@types";
 
 type Props = {
   handleClear: (dispatch: Dispatch) => any;
@@ -25,24 +26,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: "center",
     width: "100%",
   },
-  cardContainer: {
-    padding: theme.spacing(9),
-  },
   clearAllContainer: {
     alignItems: "center",
     display: "flex",
     justifyContent: "center",
-  },
-  container: {
-    display: "grid",
-    gridGap: theme.spacing(5),
-    gridTemplateColumns: "1fr 1fr 1fr 1fr",
-    [theme.breakpoints.down("md")]: {
-      gridTemplateColumns: "1fr 1fr 1fr",
-    },
-    [theme.breakpoints.down("sm")]: {
-      gridTemplateColumns: "1fr 1fr",
-    },
   },
 }));
 
@@ -52,31 +39,43 @@ const CardContainer = (props: Props) => {
   const { state, dispatch } = store;
   const { data, favorites, loading, error } = state;
 
+  let [page, setPage] = React.useState<number>(1);
+  const PER_PAGE = 6;
+
+  const dataLength = showFavorites ? favorites.length : data.length;
+  const count = Math.ceil(dataLength / PER_PAGE);
+  const _DATA = usePagination(showFavorites ? favorites : data, PER_PAGE);
+
+  const handleChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage);
+    _DATA.jump(newPage);
+  };
+
   const getCards = () => {
     if (showFavorites) {
-      return favorites.map((info, i) => {
+      return _DATA.currentData().map((info, i) => {
         return (
-          <div className={classes.cardContainer} key={`card-${i}`}>
+          <Grid item xs={6} key={`card-${i}`}>
             <SpaceCard
               favorites={favorites}
               info={info}
               store={store}
               toggleFavAction={toggleFavAction}
             />
-          </div>
+          </Grid>
         );
       });
     } else {
-      return data.map((info, i) => {
+      return _DATA.currentData().map((info, i) => {
         return (
-          <div className={classes.cardContainer} key={`card-${i}`}>
+          <Grid item xs={12} sm={6} md={4} key={`card-${i}`}>
             <SpaceCard
               favorites={favorites}
               info={info}
               store={store}
               toggleFavAction={toggleFavAction}
             />
-          </div>
+          </Grid>
         );
       });
     }
@@ -92,7 +91,38 @@ const CardContainer = (props: Props) => {
 
   return (
     <>
-      <div className={classes.container}>{getCards()}</div>
+      <Container sx={{ paddingTop: "24px" }}>
+        <Grid container spacing={4}>
+          {getCards()}
+        </Grid>
+        {!showFavorites && (
+          <Grid sx={{ padding: "15px 0 15px 0" }}>
+            <Pagination
+              color="primary"
+              count={count}
+              onChange={handleChange}
+              page={page}
+              shape="circular"
+              size="large"
+              variant="outlined"
+            />
+          </Grid>
+        )}
+        {showFavorites && favorites.length > 0 && (
+          <Grid sx={{ padding: "15px 0 15px 0" }}>
+            <Pagination
+              color="primary"
+              count={count}
+              onChange={handleChange}
+              page={page}
+              shape="circular"
+              size="large"
+              variant="outlined"
+            />
+          </Grid>
+        )}
+      </Container>
+
       <div>
         {showFavorites && !favorites.length && (
           <div className={classes.addFavContainer}>

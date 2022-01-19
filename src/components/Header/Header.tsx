@@ -17,9 +17,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 const pages = [{ label: "Favorites", path: "/favorites" }];
 
 const Header = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
 
-  const handleOpenNavMenu = (event: any) => {
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
 

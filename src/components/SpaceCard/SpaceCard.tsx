@@ -7,15 +7,15 @@ import {
   CardMedia,
   Collapse,
   IconButton,
+  IconButtonProps,
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
+import { styled } from "@mui/material/styles";
 
 import { AppState, Dispatch, FavAction, SpaceDataPlus } from "../../@types";
-
-import { styled } from "@mui/material/styles";
 
 type Props = {
   favorites: Array<SpaceDataPlus>;
@@ -24,7 +24,11 @@ type Props = {
   toggleFavAction: FavAction;
 };
 
-const ExpandMore = styled((props: any) => {
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
@@ -47,10 +51,10 @@ const SpaceCard = ({ favorites, info, store, toggleFavAction }: Props) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 400 }}>
       <CardMedia alt={title} component="img" height="194" image={hdurl} />
       <CardContent>
-        <Typography color="text.secondary" variant="body2">
+        <Typography color="text.primary" variant="body2">
           {title}
         </Typography>
         <Typography color="text.secondary" variant="body2">
