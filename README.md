@@ -23,6 +23,9 @@ A website to view, share, and favorite images from the NASA APOD API
 6. Go to `http://localhost:3000/` and you should see the page there
 7. Then, you can enter `control + c` in your terminal to stop the server at any time
 
+## Note:
+- Purposely limiting the search results starting from November 1, 2021 to limit the time to fetch data
+
 ## This project was created by:
 
 - [Michelle Kaplan](https://github.com/MichelleKaplan7)
